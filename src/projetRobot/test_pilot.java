@@ -7,15 +7,19 @@ public class test_pilot
 {
 	private final static double roue = 5.6;
 	private final static double entraxe = 12.5;
+	// ORI
 	private final static EV3LargeRegulatedMotor mLeftMotor = new EV3LargeRegulatedMotor(MotorPort.C);
 	private final static EV3LargeRegulatedMotor mRightMotor = new EV3LargeRegulatedMotor(MotorPort.B);
 	private final static EV3MediumRegulatedMotor pince = new EV3MediumRegulatedMotor(MotorPort.A);
-    private DifferentialPilot pilot;
-    private boolean reculer = false;
+    // Toby
+//	private final static EV3LargeRegulatedMotor mLeftMotor = new EV3LargeRegulatedMotor(MotorPort.B);
+//	private final static EV3LargeRegulatedMotor mRightMotor = new EV3LargeRegulatedMotor(MotorPort.A);
+//	private final static EV3MediumRegulatedMotor pince = new EV3MediumRegulatedMotor(MotorPort.C);
+	private DifferentialPilot pilot;
     	
     // Initialisation du pilot
 	public test_pilot() {
-		pilot = new DifferentialPilot(roue, roue, entraxe, mLeftMotor, mRightMotor, this.reculer);
+		pilot = new DifferentialPilot(roue, roue, entraxe, mLeftMotor, mRightMotor, false);
 	}
 	
 	// Permet de tourner le robot à une vitesse de rotation donnee à un angle donnee  
@@ -39,41 +43,52 @@ public class test_pilot
 	
 	// Permet de reculer le robot, il ne doit pas heurter les murs!!
 	public void reculer(double vitesse, double distance) {
-		this.reculer = true;
 		pilot.setLinearSpeed(vitesse);
-		pilot.travel(distance, false);
+		pilot.travel(-distance, false);
 	}
 		
-	// Permet de déplacer le robot de manière courbee.
+	// Permet de déplacer le robot de manière courbée.
 	public void courbe(double degre, double angle) {
 		pilot.steer(degre, angle);
-		pilot.travel(20,false);
+		pilot.travel(20, false);
 	}
 	
 	// Méthode ouvrir les pinces
 	public void ouvrir() {
-		pince.rotate(380*2);
-		pilot.travel(10, false);
+		pince.rotate(360*2);
 	}
 	
 	// Méthode fermer les pinces
 	public void fermer() {
-		pince.rotate(-380*2);
+		pince.rotate(-360*2);
+	}
+	
+	// Méthode récupération de palet en avançant
+	public void recuperer() {
+		this.ouvrir();
 		pilot.travel(10, false);
+		this.fermer();
+		this.tourner(50, 50);
+		this.avancer(20, 30);
+    	this.tourner(50, -50);
+	}
+	
+	// Méthode qui permet de lâcher le palet
+	public void lacher() {
+		this.ouvrir();
+		this.reculer(20, 15);
+		this.tourner(30, 90);
 	}
 	
     public static void main(String[] args)
     {
     	test_pilot ori = new test_pilot();
 //    	ori.fermer();
-    	ori.avancer(20, 50);
-//    	ori.tourner(30, 90);
-    	ori.ouvrir();
-//    	ori.avancer(20, 10);
-    	ori.fermer();
-    	ori.tourner(20, 50);
-    	ori.avancer(20, 20);
-    	ori.tourner(20, -50);
+    	ori.avancer(30, 50);
+    	ori.recuperer();
+    	ori.avancer(30, 50);
+    	ori.lacher();
+    	ori.tourner(20, 90);
 //    	ori.courbe(60, -30);
 //    	ori.courbe(60, 20);
     	ori.avancer(20, 30);
