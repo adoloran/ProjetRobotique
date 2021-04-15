@@ -20,16 +20,15 @@ public class Piloter{
 	private final static EV3LargeRegulatedMotor mRightMotor = new EV3LargeRegulatedMotor(MotorPort.A);
 	private final static EV3MediumRegulatedMotor pince = new EV3MediumRegulatedMotor(MotorPort.C);
 	private DifferentialPilot pilot;
-<<<<<<< HEAD
+
 	private final static CapteurCouleur couleur = new CapteurCouleur("S3");
 	private final static CapteurUltrason ultrason = new CapteurUltrason("S4");
+	private final static CapteurPression pression = new CapteurPression("S2");
 	
 	private double rotation = 0;
 	
 //	private boolean stopper = false;
-=======
-	private int rotation;
->>>>>>> 63963c37567f6c86ecf1005d6fed2f29636482e4
+
     	
     // Initialisation du pilot
 	public Piloter() {
@@ -45,8 +44,8 @@ public class Piloter{
 		this.rotation += angle;
 	} 
 	
-<<<<<<< HEAD
-	// Permet de faire avancer le robot a une certaine vitesse à une distance
+
+	// Permet de faire avancer le robot a une certaine vitesse ï¿½ une distance
 	public void avancer(double vitesse) {
 		pilot.setLinearSpeed(vitesse);
 		pilot.travel(300, true);
@@ -55,25 +54,22 @@ public class Piloter{
 		boolean couleurb = false;
 		while (!couleurb && distance > 30) {
 			couleurb = couleur.isWhite();
-			System.out.println(couleurb);
+			//System.out.println(couleurb);
 			distance = ultrason.getDistance()*100;
-			System.out.println(distance);
+			//System.out.println(distance);
 		}
 		pilot.stop();
 	}
 	
-=======
-	public void tournerAsynch(double vitesse, double angle, boolean bool) {
+	public void tournerAsynch(double vitesse, double angle) {
 		pilot.setAngularSpeed(vitesse);
 		pilot.rotate(angle, true);
 	}
 	
 	// Permet de faire avancer le robot a une certaine vitesse ï¿½ une distance
->>>>>>> 63963c37567f6c86ecf1005d6fed2f29636482e4
 	public void avancer(double vitesse, double distance) {
-		//on doit avancer d'une distance pour aller chercher le palet le plus proche (après scanner)
+		//on doit avancer d'une distance pour aller chercher le palet le plus proche (aprï¿½s scanner)
 		pilot.setLinearSpeed(vitesse);
-<<<<<<< HEAD
 		pilot.travel(distance, true);
 		
 		distance = ultrason.getDistance()*100;
@@ -81,34 +77,33 @@ public class Piloter{
 
 		while (!couleurb && distance > 30) {
 			couleurb = couleur.isWhite();
-			System.out.println(couleurb);
+			//System.out.println(couleurb);
 			distance = ultrason.getDistance()*100;
-			System.out.println(distance);
+			//System.out.println(distance);
 		}
 		pilot.stop();
 	}
 	
 	public void attraperPalet(double distance) {
-		// hors palet 1, attraper palet détecter lors scan (le plus proche)
-		this.avancer(distance);
+		// hors palet 1, attraper palet dï¿½tecter lors scan (le plus proche)
+		pilot.travel(distance,true);
+		while(pilot.isMoving()){
+			this.ouvrir();
+			this.fermer();
+		}
 	}
 	
 	public void marquer() {
-		//palet attrapé, seulement déposer le palet 
+		//palet attrapï¿½, seulement dï¿½poser le palet 
 		this.repositionner();
-		this.avancer(70);
+		this.avancer(50);
 		this.lacher();
-=======
-		pilot.travel(distance, false);
-		// Il faudra faire des conditions pour qu'il s'arrï¿½te
-		// Quand il rencontre un mur
-		// Quand il rencontre une ligne blanche
->>>>>>> 63963c37567f6c86ecf1005d6fed2f29636482e4
+		
 	}
 	
-	// Permet d'avancer et de récupérer le premier palet
-	public void Palet1(double vitesse, double distance) {
-		pilot.setLinearSpeed(vitesse);
+	// Permet d'avancer et de rï¿½cupï¿½rer le premier palet
+	public void Palet1(double distance) {
+		pilot.setLinearSpeed(30);
 		pilot.travel(distance, true);
 		
 		while (pilot.isMoving()) {
@@ -119,8 +114,7 @@ public class Piloter{
 		this.tourner(70, -50);
 		pilot.travel(30);
     	this.tourner(70, 50);
-    	distance = ultrason.getDistance()*100;
-    	this.avancer(70);
+    	this.avancer(50);
     	this.lacher();
 	}
 	
@@ -129,15 +123,7 @@ public class Piloter{
 		pilot.setLinearSpeed(vitesse);
 		pilot.travel(-distance, false);
 	}
-<<<<<<< HEAD
-=======
-		
-	// Permet de dï¿½placer le robot de maniï¿½re courbï¿½e.
-	public void courbe(double degre, double angle) {
-		pilot.steer(degre, angle);
-		pilot.travel(20, false);
-	}
->>>>>>> 63963c37567f6c86ecf1005d6fed2f29636482e4
+
 	
 	// Mï¿½thode ouvrir les pinces
 	public void ouvrir() {
@@ -149,27 +135,7 @@ public class Piloter{
 		pince.rotate(-360*2);
 	}
 	
-<<<<<<< HEAD
-	// Méthode récupération de palet
-//	public void recuperer() {
-//		this.ouvrir();
-//		this.avancer(30, 10);
-//		this.fermer();
-//		this.tourner(70, -50);
-//		this.avancer(30, 30);
-//    	this.tourner(70, 50);
-//	}
-=======
-	// Mï¿½thode rï¿½cupï¿½ration de palet en avanï¿½ant
-	public void recuperer() {
-		this.ouvrir();
-		pilot.travel(10, false);
-		this.fermer();
-		this.tourner(50, 50);
-		this.avancer(20, 30);
-    	this.tourner(50, -50);
-	}
->>>>>>> 63963c37567f6c86ecf1005d6fed2f29636482e4
+
 	
 	// Mï¿½thode qui permet de lï¿½cher le palet
 	public void lacher() {
@@ -191,19 +157,6 @@ public class Piloter{
 		this.tourner(60, -180);
 	}
 	
-<<<<<<< HEAD
-	public static void main(String[] args)
-=======
-	public void repositionner() {
-		if (rotation != 0) {
-			this.tourner(50, -rotation);
-		}
-	}
-	
-	public void demiTour() {
-		this.tourner(60, -180);
-	}
-	
 	public DifferentialPilot getPilot() {
 		return pilot;
 	}
@@ -212,10 +165,13 @@ public class Piloter{
 		return pince;
 	}
 	
+	public CapteurPression getPression() {
+		return pression ; 
+	}
+	
 	
 	
     public static void main(String[] args)
->>>>>>> 63963c37567f6c86ecf1005d6fed2f29636482e4
     {
     	Piloter toby = new Piloter();
 //    	toby.estMur();

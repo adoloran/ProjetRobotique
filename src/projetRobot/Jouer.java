@@ -22,45 +22,20 @@ public class Jouer {
 
 	}
 
-	public void marquer() {
-		if (nbJetons == 0) {
-			
-		} else {
-
-		}
-
-	}
-
-	public void chercherPalet() {
-		if (nbJetons == 0) {
-			robot.fermer();
-			robot.ouvrir();
-			robot.avancer(30,16);
-			robot.fermer();
-			robot.tourner(15, 45);
-			robot.avancer(40, 20);
-			robot.tourner(15, -45);
-			robot.avancer(40, 20);
-			robot.ouvrir();
-			robot.avancer(15, -30);
-			robot.tourner(15, -45);
-			robot.fermer();
-		}
-	}
-
 	public void lancerJeu() {
 		System.out.println(robot.getNom()+ " va commencer à jouer ! Appuyer sur le bouton central pour commencer.");
 		// Boutton START
 		Button.ENTER.waitForPress();
 		System.out.println(score());
-
-		// Premier palet
-			chercherPalet();
-		// Autres palets
-//		while (nbJetons < 0) {
-//			// scannerZone() ;
-//					
-//		}
+		robot.Palet1(57) ; 
+		while (nbJetons <9) {
+			float distance = robot.scannerZone();
+			robot.attraperPalet(distance);
+			if (robot.getPression().isPressed()) {
+				robot.marquer();
+				nbJetons++; 
+			}
+		}
 
 		System.out.println("Fin de la partie");
 	}
@@ -70,8 +45,8 @@ public class Jouer {
 //		Robot Ori = new Robot("S4", "S4","S3");
 		Robot Toby = new Robot("Toby","S2", "S4", "S3");
 		Jouer premierJeu = new Jouer(Toby);
-//		premierJeu.lancerJeu();
-		Toby.ouvrir();
+		premierJeu.lancerJeu();
+		//Toby.ouvrir();
 	}
 
 }

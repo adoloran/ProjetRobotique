@@ -4,6 +4,7 @@ import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.sensor.EV3TouchSensor;
 
 public class CapteurPression {
+	
 	private EV3TouchSensor CapteurPression;
 
 	public CapteurPression(String nomPort) {

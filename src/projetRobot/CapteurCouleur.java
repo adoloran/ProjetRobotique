@@ -1,3 +1,5 @@
+package projetRobot;
+
 import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.sensor.EV3ColorSensor;
 
@@ -16,14 +18,14 @@ public class CapteurCouleur {
 	}
 	
 	public void CalibrerWhite() {
-		// appelle cette méthode lorsque le robot est placé sur la couleur blanche.
-		// actualise la valeur ID associée à la couleur blanche
+		// appelle cette mï¿½thode lorsque le robot est placï¿½ sur la couleur blanche.
+		// actualise la valeur ID associï¿½e ï¿½ la couleur blanche
 		RealIDWhite = mesureColorID();
 		
 	}
 	
 	public boolean isWhite() {
-		//Renvoie true si le capteur couleur mesure un ID equivalent à Blanc.
+		//Renvoie true si le capteur couleur mesure un ID equivalent ï¿½ Blanc.
 		return (mesureColorID()==RealIDWhite);
 	}
 	
