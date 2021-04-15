@@ -1,5 +1,9 @@
 package projetRobot;
 
+import java.util.Iterator;
+import java.util.Map;
+import java.util.TreeMap;
+
 import lejos.hardware.Button;
 
 public class Jouer {
@@ -17,10 +21,10 @@ public class Jouer {
 	public String score() {
 		return "Vous avez " + nbJetons + " points ! ";
 	}
+	
+	
 
-	public void scannerZone() {
 
-	}
 
 	public void marquer() {
 		if (nbJetons == 0) {
@@ -64,6 +68,10 @@ public class Jouer {
 
 		System.out.println("Fin de la partie");
 	}
+	
+	public Robot getRobot() {
+		return robot;
+	}
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -71,7 +79,9 @@ public class Jouer {
 		Robot Toby = new Robot("Toby","S2", "S4", "S3");
 		Jouer premierJeu = new Jouer(Toby);
 //		premierJeu.lancerJeu();
-		Toby.ouvrir();
+		//Toby.ouvrir();
+		//Toby.scannerZone();
+		premierJeu.getRobot().scannerZone();
 	}
 
 }

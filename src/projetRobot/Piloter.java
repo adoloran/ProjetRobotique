@@ -1,3 +1,5 @@
+package projetRobot;
+
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
 import lejos.hardware.motor.EV3MediumRegulatedMotor;
 import lejos.hardware.port.MotorPort;
@@ -9,22 +11,23 @@ public class Piloter{
 	private final static double entraxe = 12.5;
 	
 	// ORI
-	private final static EV3LargeRegulatedMotor mLeftMotor = new EV3LargeRegulatedMotor(MotorPort.C);
-	private final static EV3LargeRegulatedMotor mRightMotor = new EV3LargeRegulatedMotor(MotorPort.B);
-	private final static EV3MediumRegulatedMotor pince = new EV3MediumRegulatedMotor(MotorPort.A);
+//	private final static EV3LargeRegulatedMotor mLeftMotor = new EV3LargeRegulatedMotor(MotorPort.C);
+//	private final static EV3LargeRegulatedMotor mRightMotor = new EV3LargeRegulatedMotor(MotorPort.B);
+//	private final static EV3MediumRegulatedMotor pince = new EV3MediumRegulatedMotor(MotorPort.A);
     
 	// Toby
-//	private final static EV3LargeRegulatedMotor mLeftMotor = new EV3LargeRegulatedMotor(MotorPort.B);
-//	private final static EV3LargeRegulatedMotor mRightMotor = new EV3LargeRegulatedMotor(MotorPort.A);
-//	private final static EV3MediumRegulatedMotor pince = new EV3MediumRegulatedMotor(MotorPort.C);
+	private final static EV3LargeRegulatedMotor mLeftMotor = new EV3LargeRegulatedMotor(MotorPort.B);
+	private final static EV3LargeRegulatedMotor mRightMotor = new EV3LargeRegulatedMotor(MotorPort.A);
+	private final static EV3MediumRegulatedMotor pince = new EV3MediumRegulatedMotor(MotorPort.C);
 	private DifferentialPilot pilot;
+	private int rotation;
     	
     // Initialisation du pilot
 	public Piloter() {
 		pilot = new DifferentialPilot(roue, roue, entraxe, mLeftMotor, mRightMotor, false);
 	}
 	
-	// Permet de tourner le robot à une vitesse de rotation donnee à un angle donnee  
+	// Permet de tourner le robot ï¿½ une vitesse de rotation donnee ï¿½ un angle donnee  
 	public void tourner(double vitesse, double angle) {
 		// Vitesse de rotation (<20 = lent)
 		pilot.setAngularSpeed(vitesse);
@@ -32,11 +35,16 @@ public class Piloter{
 		pilot.rotate(angle);
 	} 
 	
-	// Permet de faire avancer le robot a une certaine vitesse à une distance
+	public void tournerAsynch(double vitesse, double angle, boolean bool) {
+		pilot.setAngularSpeed(vitesse);
+		pilot.rotate(angle, true);
+	}
+	
+	// Permet de faire avancer le robot a une certaine vitesse ï¿½ une distance
 	public void avancer(double vitesse, double distance) {
 		pilot.setLinearSpeed(vitesse);
 		pilot.travel(distance, false);
-		// Il faudra faire des conditions pour qu'il s'arrête
+		// Il faudra faire des conditions pour qu'il s'arrï¿½te
 		// Quand il rencontre un mur
 		// Quand il rencontre une ligne blanche
 	}
@@ -49,23 +57,23 @@ public class Piloter{
 		pilot.travel(-distance, false);
 	}
 		
-	// Permet de déplacer le robot de manière courbée.
+	// Permet de dï¿½placer le robot de maniï¿½re courbï¿½e.
 	public void courbe(double degre, double angle) {
 		pilot.steer(degre, angle);
 		pilot.travel(20, false);
 	}
 	
-	// Méthode ouvrir les pinces
+	// Mï¿½thode ouvrir les pinces
 	public void ouvrir() {
 		pince.rotate(360*2);
 	}
 	
-	// Méthode fermer les pinces
+	// Mï¿½thode fermer les pinces
 	public void fermer() {
 		pince.rotate(-360*2);
 	}
 	
-	// Méthode récupération de palet en avançant
+	// Mï¿½thode rï¿½cupï¿½ration de palet en avanï¿½ant
 	public void recuperer() {
 		this.ouvrir();
 		pilot.travel(10, false);
@@ -75,13 +83,33 @@ public class Piloter{
     	this.tourner(50, -50);
 	}
 	
-	// Méthode qui permet de lâcher le palet
+	// Mï¿½thode qui permet de lï¿½cher le palet
 	public void lacher() {
 		this.ouvrir();
 		this.reculer(20, 15);
 		this.fermer();
 		this.tourner(30, 90);
 	}
+	
+	public void repositionner() {
+		if (rotation != 0) {
+			this.tourner(50, -rotation);
+		}
+	}
+	
+	public void demiTour() {
+		this.tourner(60, -180);
+	}
+	
+	public DifferentialPilot getPilot() {
+		return pilot;
+	}
+	
+	public EV3MediumRegulatedMotor getPince() {
+		return pince;
+	}
+	
+	
 	
     public static void main(String[] args)
     {
