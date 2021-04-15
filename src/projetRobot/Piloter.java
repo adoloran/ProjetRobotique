@@ -5,7 +5,7 @@ import lejos.hardware.motor.EV3MediumRegulatedMotor;
 import lejos.hardware.port.MotorPort;
 import lejos.robotics.navigation.DifferentialPilot;
 
-public class Piloter{
+public class Piloter  {
 	
 	private final static double roue = 5.6;
 	private final static double entraxe = 12.5;
@@ -16,22 +16,31 @@ public class Piloter{
 //	private final static EV3MediumRegulatedMotor pince = new EV3MediumRegulatedMotor(MotorPort.A);
     
 	// Toby
-	private final static EV3LargeRegulatedMotor mLeftMotor = new EV3LargeRegulatedMotor(MotorPort.B);
-	private final static EV3LargeRegulatedMotor mRightMotor = new EV3LargeRegulatedMotor(MotorPort.A);
-	private final static EV3MediumRegulatedMotor pince = new EV3MediumRegulatedMotor(MotorPort.C);
+	private final EV3LargeRegulatedMotor mLeftMotor ;
+	private final EV3LargeRegulatedMotor mRightMotor;
+	private final EV3MediumRegulatedMotor pince ;
 	private DifferentialPilot pilot;
 
-	private final static CapteurCouleur couleur = new CapteurCouleur("S3");
-	private final static CapteurUltrason ultrason = new CapteurUltrason("S4");
-	private final static CapteurPression pression = new CapteurPression("S2");
+	private final CapteurCouleur couleur ;
+	private final CapteurUltrason ultrason ;
+	private final CapteurPression pression ;
 	
 	private double rotation = 0;
+	
+	@SuppressWarnings("deprecation")
 	
 //	private boolean stopper = false;
 
     	
     // Initialisation du pilot
-	public Piloter() {
+	public Piloter(Robot robot) {
+		mLeftMotor = robot.getMotorG() ;
+		mRightMotor = robot.getMotorD();
+		pince = robot.getPince();
+		couleur = robot.getCapteurC() ;
+		ultrason = robot.getCapteurU();
+		pression = robot.getCapteurP();
+		
 		pilot = new DifferentialPilot(roue, roue, entraxe, mLeftMotor, mRightMotor, false);
 	}
 	
@@ -87,10 +96,18 @@ public class Piloter{
 	public void attraperPalet(double distance) {
 		// hors palet 1, attraper palet d�tecter lors scan (le plus proche)
 		pilot.travel(distance,true);
-		while(pilot.isMoving()){
+		boolean couleurb = false;
+
+		while (!couleurb && distance > 30) {
+			couleurb = couleur.isWhite();
+			//System.out.println(couleurb);
+			distance = ultrason.getDistance()*100;
+			System.out.println(distance);
 			this.ouvrir();
 			this.fermer();
 		}
+		pilot.stop();			
+		
 	}
 	
 	public void marquer() {
@@ -158,29 +175,26 @@ public class Piloter{
 	}
 	
 	public DifferentialPilot getPilot() {
+		
 		return pilot;
 	}
 	
-	public EV3MediumRegulatedMotor getPince() {
-		return pince;
-	}
-	
-	public CapteurPression getPression() {
-		return pression ; 
+	public void setRotation(double rotation) {
+		this.rotation += rotation;
 	}
 	
 	
 	
     public static void main(String[] args)
     {
-    	Piloter toby = new Piloter();
+//    	Piloter toby = new Piloter();
 //    	toby.estMur();
 //    	toby.fermer(); toby.fermer(); 
 //    	couleur.CalibrerWhite();
 //    	double distance = ultrason.getDistance()*100;
 //    	toby.Palet1(35, distance);
-    	toby.tourner(50, -90);
-    	toby.marquer();
+//    	toby.tourner(50, -90);
+//    	toby.marquer();
 //    	System.out.println(distance);
 //    	toby.fermer();
 ////    	toby.reculer(10, 10);

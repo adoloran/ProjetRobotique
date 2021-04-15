@@ -18,26 +18,52 @@ public class Jouer {
 		return "Vous avez " + nbJetons + " points ! ";
 	}
 
-	public void scannerZone() {
 
-	}
 
 	public void lancerJeu() {
-		System.out.println(robot.getNom()+ " va commencer à jouer ! Appuyer sur le bouton central pour commencer.");
-		// Boutton START
-		Button.ENTER.waitForPress();
-		System.out.println(score());
-		robot.Palet1(57) ; 
-		while (nbJetons <9) {
-			float distance = robot.scannerZone();
-			robot.attraperPalet(distance);
-			if (robot.getPression().isPressed()) {
-				robot.marquer();
-				nbJetons++; 
+		
+		int Etat = 0 ;
+		double distance = 0;
+		while(true) {
+			System.out.println("Nous sommes dans l'etat :"+ Etat);
+			switch (Etat) {
+			case 0 :
+				System.out.println(robot.getNom()+ " va commencer a jouer ! Appuyer sur le bouton central pour commencer.");
+				Button.ENTER.waitForPress();
+				Etat = 1 ;
+				break;
+			case 1 : 
+				robot.getPiloter().Palet1(57);
+				Etat = 2 ;
+				break ;
+			case 2 : 
+				distance = robot.scannerZone();
+				// calibrage
+				// 
+				if(robot.getCapteurU().getDistance() == distance) {
+					Etat = 3;
+				} else {
+					Etat = 4 ;
+				}
+				break;
+			case 3 :
+				robot.getPiloter().attraperPalet(distance);
+				Etat = 5 ;
+				break;
+			case 4 : 
+				System.out.println("Calibrage necessaire");
+				robot.calibrage();
+				Etat = 3;
+				break ; 
+			case 5 :
+				robot.getPiloter().marquer() ; 
+				nbJetons++ ; 
+				System.out.println(score());
+				Etat = 2 ; 
+				break;
 			}
 		}
-
-		System.out.println("Fin de la partie");
+//		System.out.println("Fin de la partie");
 	}
 
 	public static void main(String[] args) {
