@@ -1,3 +1,5 @@
+package projetRobot;
+
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
 import lejos.hardware.motor.EV3MediumRegulatedMotor;
 import lejos.hardware.port.MotorPort;
@@ -18,19 +20,23 @@ public class Piloter{
 	private final static EV3LargeRegulatedMotor mRightMotor = new EV3LargeRegulatedMotor(MotorPort.A);
 	private final static EV3MediumRegulatedMotor pince = new EV3MediumRegulatedMotor(MotorPort.C);
 	private DifferentialPilot pilot;
+<<<<<<< HEAD
 	private final static CapteurCouleur couleur = new CapteurCouleur("S3");
 	private final static CapteurUltrason ultrason = new CapteurUltrason("S4");
 	
 	private double rotation = 0;
 	
 //	private boolean stopper = false;
+=======
+	private int rotation;
+>>>>>>> 63963c37567f6c86ecf1005d6fed2f29636482e4
     	
     // Initialisation du pilot
 	public Piloter() {
 		pilot = new DifferentialPilot(roue, roue, entraxe, mLeftMotor, mRightMotor, false);
 	}
 	
-	// Permet de tourner le robot à une vitesse de rotation donnee à un angle donnee  
+	// Permet de tourner le robot ï¿½ une vitesse de rotation donnee ï¿½ un angle donnee  
 	public void tourner(double vitesse, double angle) {
 		// Vitesse de rotation (<20 = lent)
 		pilot.setAngularSpeed(vitesse);
@@ -39,6 +45,7 @@ public class Piloter{
 		this.rotation += angle;
 	} 
 	
+<<<<<<< HEAD
 	// Permet de faire avancer le robot a une certaine vitesse à une distance
 	public void avancer(double vitesse) {
 		pilot.setLinearSpeed(vitesse);
@@ -55,9 +62,18 @@ public class Piloter{
 		pilot.stop();
 	}
 	
+=======
+	public void tournerAsynch(double vitesse, double angle, boolean bool) {
+		pilot.setAngularSpeed(vitesse);
+		pilot.rotate(angle, true);
+	}
+	
+	// Permet de faire avancer le robot a une certaine vitesse ï¿½ une distance
+>>>>>>> 63963c37567f6c86ecf1005d6fed2f29636482e4
 	public void avancer(double vitesse, double distance) {
 		//on doit avancer d'une distance pour aller chercher le palet le plus proche (après scanner)
 		pilot.setLinearSpeed(vitesse);
+<<<<<<< HEAD
 		pilot.travel(distance, true);
 		
 		distance = ultrason.getDistance()*100;
@@ -82,6 +98,12 @@ public class Piloter{
 		this.repositionner();
 		this.avancer(70);
 		this.lacher();
+=======
+		pilot.travel(distance, false);
+		// Il faudra faire des conditions pour qu'il s'arrï¿½te
+		// Quand il rencontre un mur
+		// Quand il rencontre une ligne blanche
+>>>>>>> 63963c37567f6c86ecf1005d6fed2f29636482e4
 	}
 	
 	// Permet d'avancer et de récupérer le premier palet
@@ -107,17 +129,27 @@ public class Piloter{
 		pilot.setLinearSpeed(vitesse);
 		pilot.travel(-distance, false);
 	}
+<<<<<<< HEAD
+=======
+		
+	// Permet de dï¿½placer le robot de maniï¿½re courbï¿½e.
+	public void courbe(double degre, double angle) {
+		pilot.steer(degre, angle);
+		pilot.travel(20, false);
+	}
+>>>>>>> 63963c37567f6c86ecf1005d6fed2f29636482e4
 	
-	// Méthode ouvrir les pinces
+	// Mï¿½thode ouvrir les pinces
 	public void ouvrir() {
 		pince.rotate(360*2);
 	}
 	
-	// Méthode fermer les pinces
+	// Mï¿½thode fermer les pinces
 	public void fermer() {
 		pince.rotate(-360*2);
 	}
 	
+<<<<<<< HEAD
 	// Méthode récupération de palet
 //	public void recuperer() {
 //		this.ouvrir();
@@ -127,8 +159,19 @@ public class Piloter{
 //		this.avancer(30, 30);
 //    	this.tourner(70, 50);
 //	}
+=======
+	// Mï¿½thode rï¿½cupï¿½ration de palet en avanï¿½ant
+	public void recuperer() {
+		this.ouvrir();
+		pilot.travel(10, false);
+		this.fermer();
+		this.tourner(50, 50);
+		this.avancer(20, 30);
+    	this.tourner(50, -50);
+	}
+>>>>>>> 63963c37567f6c86ecf1005d6fed2f29636482e4
 	
-	// Méthode qui permet de lâcher le palet
+	// Mï¿½thode qui permet de lï¿½cher le palet
 	public void lacher() {
 		this.ouvrir();
 		pilot.setLinearSpeed(30);
@@ -148,7 +191,31 @@ public class Piloter{
 		this.tourner(60, -180);
 	}
 	
+<<<<<<< HEAD
 	public static void main(String[] args)
+=======
+	public void repositionner() {
+		if (rotation != 0) {
+			this.tourner(50, -rotation);
+		}
+	}
+	
+	public void demiTour() {
+		this.tourner(60, -180);
+	}
+	
+	public DifferentialPilot getPilot() {
+		return pilot;
+	}
+	
+	public EV3MediumRegulatedMotor getPince() {
+		return pince;
+	}
+	
+	
+	
+    public static void main(String[] args)
+>>>>>>> 63963c37567f6c86ecf1005d6fed2f29636482e4
     {
     	Piloter toby = new Piloter();
 //    	toby.estMur();
