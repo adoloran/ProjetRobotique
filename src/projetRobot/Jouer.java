@@ -1,23 +1,20 @@
-package projetRobot;
+package projetRobot; 
 
 import lejos.hardware.Button;
 
 public class Jouer {
-	private int rotation;
 	private int nbJetons;
 	private Robot robot;
 
 	public Jouer(Robot robot) {
 		// TODO Auto-generated constructor stub
 		this.robot=robot;
-		rotation = 90;
 		nbJetons = 0;
 	}
 
 	public String score() {
 		return "Vous avez " + nbJetons + " points ! ";
 	}
-
 
 
 	public void lancerJeu() {
@@ -40,11 +37,11 @@ public class Jouer {
 				distance = robot.scannerZone();
 				// calibrage
 				// 
-				if(robot.getCapteurU().getDistance() == distance) {
-					Etat = 3;
-				} else {
-					Etat = 4 ;
-				}
+//				if(robot.getCapteurU().getDistance() == distance) {
+//					Etat = 3;
+//				} else {
+					Etat =  3;
+//				}
 				break;
 			case 3 :
 				robot.getPiloter().attraperPalet(distance);
