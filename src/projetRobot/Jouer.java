@@ -44,8 +44,7 @@ public class Jouer {
 //				}
 				break;
 			case 3 :
-				robot.getPiloter().attraperPalet(distance);
-				Etat = 5 ;
+				Etat = robot.getPiloter().attraperPalet(distance) ? 5 : 2;
 				break;
 			case 4 : 
 				System.out.println("Calibrage necessaire");

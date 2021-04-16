@@ -95,24 +95,24 @@ public class Piloter  {
 	
 	public boolean attraperPalet(double distance) {
 		// hors palet 1, attraper palet d�tecter lors scan (le plus proche)
+		this.ouvrir() ;
 		pilot.travel(distance,true);
-		this.ouvrir();
-		
-		while (pilot.isMoving()) {
-			if (couleur.isWhite() || distance < 30) {
+		boolean couleurb = false;
+		boolean aEtepressed = false ; 
+		while (pilot.isMoving() && ! aEtepressed) {
+			couleurb = couleur.isWhite();
+//			//System.out.println(couleurb);
+			distance = ultrason.getDistance()*100;
+			if(couleurb || distance < 30) {
 				pilot.stop();
 				this.fermer();
-				return false;
+				return aEtepressed;
+			} else if (pression.isPressed()) {
+				aEtepressed = true ;
 			}
-			
-			if (pression.isPressed()) {
-				this.fermer();
-				return true;
-			}
-			
 		}
-		this.fermer();	
-		return false;
+		this.fermer();
+		return aEtepressed ;
 	}
 	
 	public void marquer() {
